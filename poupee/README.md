@@ -102,6 +102,8 @@ python -c "print int('6EA51B0BFF30EC10E94942914B2BA3E7545B4FC20BA4FB1890312476DD
  **N** est seulement composé de 76 digits, il est fort probable que ce modulus est connu.
  Un site permet de trouver ces deux paramètres à partir de **N** -> factordb.com.
 On rentre la valeur décimale de **N** et on lance la factorisation : 
+
+---
 ![](images/factordb.png)
 
 Parfait, on récupère **P** et **Q**.
@@ -153,6 +155,8 @@ Il y a plusieurs façons pour cela :
 
 Pour cette fois, on va le faire sur https://8gwifi.org/rsafunctions.jsp.
 On rentre les clés ainsi que le texte chiffré, et on récupère le mot de passe du **7Zip** :
+
+---
 ![](images/7zippass.png)
 
 ---
@@ -197,8 +201,11 @@ apt install default-jre
 ```
 Stegsolve nous permet de jouer avec les couleurs de l'image.
 En manipulant un peu, on arrive sur un QR CODE dans le coin droit :
+
+---
 ![](images/qrcode.png)
 
+---
 On scanne le QR CODE avec une application ( Kaspersky QR Code Scanner dans cet exemple ).
 On obtient une clé RSA privée : 
 ```
@@ -315,13 +322,29 @@ On obtient potentiellement le premier caractère du mot de passe.
 On décompile ensuite le programme dans IDA pour analyser les fonctions du programme.
 
 Tout d'abord, on voit que le programme charge une adresse dans le registre, il affichera à cette adresse le message du challenge.
+
+---
 ![](images/ida.png)
+
+---
 ![](images/ida2.png)
+
+---
 Il charge à nouveau une adresse dans le même registre, mais cette fois la donnée n'est pas lisible.
+
+---
 ![](images/ida4.png)
+
+---
 Il vérifie que l'un des paramètres auquel le programme est lancé avec soit bien égal à 2.
+
+---
 ![](images/ida3.png)
+
+---
 Et on remarque la partie la plus intéressante, la boucle.
+
+---
 ![](images/ida5.png)
 
 ---
@@ -347,12 +370,19 @@ On voit qu'on a une boucle qui effectue une action "edx" fois puis sort.
 On charge 0x11 (17) dans edx, donc cette boucle, boucle 17 fois (on peut le vérifier avec gdb et des breakpoints).
 
 On sait que H ou T pourraient être la première lettre, et on sait aussi que le programme XOR la lettre avec la donnée plus haut. On récupère les 17 bytes qu'on met dans un script python qui va servir à nous faire le XOR.
+
+---
 ![](images/script.png)
 
+---
 Ce script permet d'effectuer un XOR avec la valeur de la lettre qu'on lui attribue et il nous retourne les valeurs (bytes).
 
 On copie le code retourné sur ce site https://onlinedisassembler.com/odaweb/ il nous retourne ça, après avoir réglé les paramètres (architecture, adresse du début) :
+
+---
 ![](images/online.png)
+
+---
 * `xor ebx, ebx`
 Remet le registre ebx à 0
 * `mov ecx,0x8049166`
@@ -369,7 +399,11 @@ On jump sur l'adresse dans esi, qui est le début de la boucle.
 A ce stade esi est incrémenté, on utilise maintenant le second caractère du mot de passe. On ne peut donc pas bruteforce à la main.
 
 Comme on doit toujours jump sur l'adresse 0x80480aa, on peut se dire que la valeur "aa" sera présente dans les bytes après avoir été XOR. On peut donc faire un petit ajout à notre script python pour vérifier ça.
+
+---
 ![](images/script2.png)
+
+---
 Resultat :
 ```
 0 has 0xaa
@@ -384,8 +418,11 @@ On retourne sur le site, on redonne les bytes qui ont été XOR et on peut ainsi
 On recommence le processus pour chaque caractère jusqu'à trouver le mot de passe.
 
 Le script final :
+
+---
 ![](images/script3.png)
 
+---
 On met le mot de passe dans une variable et on exécute le binaire :
 ```
 a=H0pp3R
