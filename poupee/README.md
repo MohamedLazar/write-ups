@@ -6,9 +6,10 @@ Pièce jointe du challenge :
 ```
 logo.png
 ```
-
+---
 ![](images/logo.png)
 
+---
 La solution du challenge sera réalisée sous linux (ubuntu).
 
 ## Solution
@@ -434,3 +435,10 @@ VicToire !
 ```
 
 Flag : H0pp3R
+
+
+Challenge réalisé avec :
+
+* <a href="https://github.com/mohamedlazar" title="link to mohamed git">Mohamed Lazar</a>
+
+* Théo Hay
